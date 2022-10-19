@@ -3,5 +3,7 @@ title: "test merge conflict"
 output: html_document
 ---
 
-
 I'm trying to make a merge conflict. hi
+
+I'm trying to make a merge conflict. Pizza pizza yum yum. 
+
