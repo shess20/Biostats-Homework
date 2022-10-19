@@ -1,0 +1,81 @@
+---
+title: "Hess-Homework19.Rmd"
+author: "Sierra Hess"
+output: html_document
+---
+
+## Introduction 
+
+
+## Set things up:
+Add code to clear R's brain and to turn on the dplyr and here packages
+```{r}
+rm(list = ls()) # clear R's brain
+library(dplyr)
+library(ggplot2)
+library (here)
+library(Hmisc)
+```
+
+
+## Read in data
+Import the csv file called "Class_leaf_measurements.csv" and name the file leaves
+```{r}
+Leaves <- read.csv(here("Data", "Class_leaf_measurements.csv"), stringsAsFactors = TRUE) #this reads in the data and makes strings factors
+```
+
+## Examine the data set using the str() function.
+```{r}
+str(Leaves) # you can look at the data frame by using str()
+```
+
+## Repair the column names so that there are no special characters or spaces.
+```{r}
+names(Leaves) <- c( "Tree_num", "Species", "Leaf_num", "DBH_cm", "Petiole_length", "Total_length_cm", "Middle_lobe_length_cm", "Middle_lobe_width_cm", "Person")
+names(Leaves)
+```
+## Convert Species to a factor variable and determine the number of levels in the factor. Given that we only collected data from 3 species, what is the problem?
+```{r}
+str(Leaves) # you can look at the data frame by using str()
+```
+When species is converted to a factor variable, there are nine levels in the factor, however, there were only three different species types in the expiriment. The issue comes from the different spellings of the same types of trees. Since R recognizes capital letters as different from lowercase letters, when the species are spelled with different mixtures of capital and lower case letters, R sees the same species as different variables. 
+
+## Repair species names so that you end up with only 3 levels for the Species variable, red maple, sugar maple, and Norway maple.
+Lets rename the red maples, 
+```{r}
+red <- which(Leaves$Species == "red maple" | Leaves$Species == "Red maple" | Leaves$Species == "Red Maple") # Here you select all of the different spellings of the tree and group them in the variable "red"
+Leaves$Species[red] <- "red maple" # here, you rename the variables selected in red and give them all the same name
+```
+
+Lets rename the sugar maples, 
+```{r}
+sugar <- which(Leaves$Species == "sugar maple" | Leaves$Species == "Sugar maple" | Leaves$Species == "Sugar Maple")
+Leaves$Species[sugar] <- "sugar maple"
+```
+
+Lets rename the Norway maples, 
+```{r}
+Norway <- which(Leaves$Species == "Norway maple" | Leaves$Species == "Norway Maple"| Leaves$Species == "Norway mapel")
+Leaves$Species[Norway] <- "Norway maple" 
+```
+
+## Now that you have repaired the data, create a new dataset called "Sugar" by selecting only the sugar maple data from the Leaves data set.
+```{r}
+Sugar <- filter(Leaves, Species == "sugar maple") # this lets you select only the sugar maples
+```
+
+## Subset the columns in Sugar using dplyr commands so that you leave out the Person, Leaf number and Tree number variables. Save the result as Sugar.
+```{r}
+Sugar <- Leaves %>%
+    select(Species , DBH_cm, Petiole_length, Total_length_cm, Middle_lobe_length_cm, Middle_lobe_width_cm)
+```
+
+## Create a histogram of petiole lengths using the Sugar data set. 
+```{r}
+
+ggplot(data = Leaves, aes(x = Petiole_length)) + 
+  geom_histogram(color = "Blue", fill = "light blue") # this makes the histogram and lets you edit the color
+```
+
+
+

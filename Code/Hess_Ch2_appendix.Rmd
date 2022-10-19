@@ -1,0 +1,52 @@
+---
+title: "Hess_Ch2_appendix"
+author: "Sierra Hess"
+output: html_document
+---
+```{r}
+library(ggplot2)
+library(tidyverse)
+```
+
+
+```{r}
+nasty.format <- read.csv("~/BioStats/Hess-Homework/Data/nasty format.csv")
+```
+
+```{r}
+str(nasty.format)
+```
+```{r}
+library(dplyr)
+nasty.format <- filter(nasty.format, Bottle != "")
+glimpse(nasty.format)
+```
+```{r}
+library(tidyr)
+tidy_data <- gather (nasty.format, Date, Abundance, 4:11)
+glimpse(tidy_data)
+```
+```{r}
+library(stringr)
+tidy_data <- mutate(tidy_data, Date = substr(Date, 2, 20))
+unique(tidy_data$Date)
+```
+
+```{r}
+library(lubridate)
+tidy_data <- mutate (tidy_data, Date = dmy(Date))
+glimpse(tidy_data)
+```
+```{r}
+library(ggplot2)
+ggplot(data = tidy_data, aes(x = Date, y = Abundance)) +
+  geom_point() +
+  facet_wrap(~Bottle)
+```
+
+
+
+
+
+
+

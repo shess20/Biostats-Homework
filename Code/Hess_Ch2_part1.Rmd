@@ -1,0 +1,37 @@
+---
+title: "Hess_Ch2_part1"
+author: "Sierra Hess"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+library(readr)
+compensation <- read_csv("~/BioStats/Hess-Homework/Data/compensation.csv")
+```
+
+```{r}
+names(compensation)
+```
+```{r}
+head(compensation)
+```
+```{r}
+dim(compensation)
+```
+```{r}
+str(compensation)
+```
+```{r}
+library(dplyr)
+```
+
+```{r}
+glimpse(compensation)
+```
+```{r}
+tbl_df(compensation)
+```
+

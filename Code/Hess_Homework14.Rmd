@@ -1,0 +1,86 @@
+---
+title: "Using dplyr to fix mistakes"
+author: "Sierra Hess"
+output: html_document
+---
+## Introduction 
+
+
+## Set things up:
+Add code to clear R's brain and to turn on the dplyr and here packages
+```{r}
+rm(list = ls()) # clear R's brain
+library(dplyr)
+library(ggplot2)
+library (here)
+library(Hmisc)
+```
+
+## Read in data
+Import the csv file called "drug_resistance.csv",
+Then use Summary(DF) to see what it tells us. 
+```{r}
+DF <- read.csv(here("Data", "drug_resistance.csv"))
+```
+## Import the data using read.csv but without stringsAsFactors = TRUE and name the data frame "DF"  Run a summary of DF and see what it tells you.
+```{r}
+summary(DF)
+```
+The summary tells us that it interprets treatment and tech.name as a string and gives the number of strings in the dataset, and the type of data that it thinks its class and mode are (character). It also gives the numerical analysis of the plate_n and colony.count data. 
+
+## Now import the data again, still using read.csv but this time adding stringsAsFactors = TRUE. Again name the dataframe DF. It will write over the first data frame you imported. Run a summary of DF and see how it differs from the first time you ran it.
+
+```{r}
+DF <- read.csv(here("Data", "drug_resistance.csv"), stringsAsFactors = TRUE)
+summary(DF)
+```
+When stringsAsFactors = TRUE, the treatment and tech.name data is interpreted as a numerical value equivalent to how often each of the data subsets appear. 
+
+## Make some notes in your .Rmd file about how the summary() command reacts to data that do vs. do not have explicit factor variables in the data set.
+
+
+When data has explicit factor variables, the summary() command interprets the data with the same inputs as equivalent data. For example, brian and brian are equivalent when data has explicit factor variables. However when data doesn't have explicit factor variables, each input is considered different data even if the values are equivalent. 
+
+## Now use either the function unique() or levels() to examine each of the text-based columns of data. In which variables do you see errors?
+```{r}
+unique(DF$Treatment)
+unique(DF$tech.name)
+```
+In the text based columns, there are errors in the grouping of data. The system is case sensitive, so becca/ Becca and brian/Brian are not equivalent to each other even though they are the same names. Also, the treatments have different spellings for the same data which is interpreted as different data by R. 
+
+## Using the techniques we discussed in class, repair the data set so that there are the appropriate number of choices for each of the character/factor variables.
+Lets rename the control treatments, 
+```{r}
+control <- which(DF$Treatment == "control" | DF$Treatment == "Control" |
+                  DF$Treatment == "cantrol")
+DF$Treatment [control] <- "Control"
+```
+
+Lets rename the drug 2 treatments, 
+```{r}
+drug2 <- which(DF$Treatment == "drug x 2" | DF$Treatment == "Drugx2" |
+                  DF$Treatment == "drug2")
+DF$Treatment [drug2] <- "drug2"
+```
+
+
+Lets rename the drug 3 treatments, 
+```{r}
+drug3 <- which(DF$Treatment == "drug x 3" | DF$Treatment == "Drug x 3" |
+                  DF$Treatment == "drug3")
+DF$Treatment [drug3] <- "drug3"
+```
+
+Lets rename the tech.name Brian, 
+```{r}
+Brian <- which(DF$tech.name == "Brian" | DF$tech.name == "brian")
+DF$tech.name[Brian] <- "Brian"
+```
+
+
+Lets rename the tech.name Brian, 
+```{r}
+Becca <- which(DF$tech.name == "Becca" | DF$tech.name == "becca")
+DF$tech.name[Becca] <- "Becca"
+```
+

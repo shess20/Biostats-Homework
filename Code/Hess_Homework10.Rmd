@@ -1,0 +1,53 @@
+---
+title: "Hess_Homework10"
+author: "Sierra Hess"
+date: "9/22/2022"
+output: html_document
+---
+
+## I will use several of the methods that I learned in Chapter 2 and in class to examine the structure of my data.
+
+## First, I will clear R's brain and load the libraries that I may need. 
+```{r}
+rm(list =ls ()) # clear R's brain.
+library(dplyr)
+library(ggplot2) 
+library(here)
+```
+
+## Next, I will load the data file.
+
+```{r}
+DF <- read.csv(here("Data", "squirrels.csv"), stringsAsFactors = TRUE)
+```
+
+## Now, I will use the dim function to get the dimensions of my data. 
+
+```{r}
+dim(DF)
+```
+This shows that the dimensions of the data set is 34 by 18. 
+
+## Next, I will use str in order to display the data's structure.
+
+```{r}
+str(DF)
+```
+This gives the structure of the data by telling us that we have a data frame type object then gives the number of observations (34) and variables (18). It also gives the names of each variable and type and the first few values for each variable. 
+
+## Next, I will use glimpse in order to view my data in a more compact layout. 
+
+```{r}
+glimpse(DF)
+```
+This shows the data in a horizontal view.
+
+
+## I will now use tbl_df in order to view my data in a table. 
+```{r}
+tbl_df(DF)
+```
+
+This shows the data in a vertical view. 
+
+

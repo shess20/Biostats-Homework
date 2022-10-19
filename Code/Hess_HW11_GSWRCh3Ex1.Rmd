@@ -1,0 +1,127 @@
+---
+title: "Homework 11"
+author: "Sierra Hess"
+output: html_document
+---
+
+In this homework, I will learn how to use several new functions.
+First, I will clear R's brain and download the libraries that I will use.
+Set things up:
+```{r}
+rm(list = ls()) # clear R's brain
+library(dplyr)
+library(ggplot2)
+library (here)
+```
+
+Next, I will read in my data using the here function.  and will use glimpse to get information about my data. 
+```{r}
+compensation <- read.csv(here("Data", "compensation.csv"))
+glimpse(compensation)
+```
+Next, I will use the summary function in order to see the statistics of my data.
+```{r}
+summary(compensation)
+```
+Next, I will use the name function to get the names of the columns and the select function to grab columns.
+```{r}
+names(compensation)
+select(compensation, Fruit) # use the fruit column
+```
+Next, I will select all columns except for one.
+```{r}
+select(compensation, -Root) #that is a minus sign
+``` 
+
+Now, I will use the slice function to grab rows. 
+```{r}
+slice(compensation, 2)
+```
+
+Next, I will invoke : in order to generate the sequence from the second to the tenth row. 
+```{r}
+slice(compensation, 2:10)
+```
+
+Now, I will collect row numbers with the c() function
+```{r}
+slice(compensation, c(2, 3, 10))
+```
+Next, I will use with to see how R interprets >.
+```{r}
+with(compensation, Fruit > 80)
+```
+Next, I will use filter() in order to return the true data for Fruit > 80
+```{r}
+filter(compensation, Fruit > 80)
+```
+Next, I will use an or function in order to add a second condition. 
+```{r}
+filter(compensation, Fruit > 80 | Fruit < 20)
+```
+
+Next, I will save my filtered data to an object. 
+```{r}
+lo_hi_fruit <- filter(compensation, Fruit > 80 | Fruit < 20)
+lo_hi_fruit
+```
+
+Now I will use the head function to limit the rows that we see. 
+```{r}
+head(compensation)
+```
+Next, I will use mutate to designate a new column name and formation to my data.
+```{r}
+compensation <- mutate(compensation, logFruit = log(Fruit))
+```
+Next, I will use the head function again on the mutated data 
+```{r}
+head(compensation)
+```
+Next, I will use the arrange function to reorder the data into increasing fruit production. 
+```{r}
+arrange(compensation, Fruit)
+```
+
+Next, I will use the filter and select functions on the same line of code. 
+```{r}
+select(filter(compensation, Fruit > 80), Root)
+```
+
+Next I will use a pipe command in order to put mu commands in different rows. 
+```{r}
+compensation %>%
+  filter(Fruit > 80) %>%
+    select (Root)
+```
+
+Next, I will use the summarize and group_by functions in order to use the nested approach with no pipe. 
+I will use the mean function to get the mean if the fruit. 
+```{r}
+summarize(
+  group_by(compensation, Grazing),
+        meanFruit = mean(Fruit))
+```
+Now I will make mean fruit an object
+```{r}
+mean.fruit <- summarize(
+  group_by(compensation, Grazing),
+        meanFruit = mean(Fruit))
+```
+
+Next, I will use the summarize function inside of a list rather than outside. 
+
+```{r}
+compensation %>%
+  group_by(Grazing) %>%
+  summarise(meanFruit = mean(Fruit))
+```
+Next, I will ask for more than one statistic. 
+
+```{r}
+compensation %>%
+  group_by(Grazing) %>%
+  summarise(
+    meanFruit = mean(Fruit),
+    sdFruit = sd(Fruit))
+```

@@ -1,0 +1,61 @@
+---
+title: "Homework 12"
+author: "Sierra Hess"
+output: html_document
+---
+## Set things up:
+Add code to clear R's brain and to turn on the dplyr and here packages
+```{r}
+rm(list = ls()) # clear R's brain
+library(dplyr)
+library(ggplot2)
+library (here)
+```
+## Read in data
+Import the csv file called "donnerville_percent_cover.csv" using stringAsFactors = True. 
+```{r}
+Cover <- read.csv(here("Data", "donnerville_percent_cover.csv"), stringsAsFactors = TRUE)
+```
+
+## Examine the data set using at least two different functions.
+### First, I will use the dim function to get the dimensions of my data. 
+
+```{r}
+glimpse(Cover)
+head(Cover)
+str(Cover)
+tail(Cover)
+names(Cover)
+```
+
+## consider renaming column headings; this choice is up to you.
+
+### Lets do it to see how it works
+
+```{r}
+names(Cover) <- c("Site", "Date",      "Plot_type", "Plot_dim",  "Slope",     "Aspect",    "Plot",      "Type",      "Percent"  )
+names(Cover)
+```
+This gives the structure of the data by telling us that we have a data frame type object then gives the number of observations (36) and variables (9). It also gives the names of each variable and type and the first few values for each variable.
+
+## Determine the average percent cover by cover type (bare, bryophytes, vascular plants) for Donnerville 1.
+```{r}
+Cover %>%
+  filter(Site == "Donnerville 1") %>%
+  group_by(Type) %>%
+  summarise(
+    avg_percent_cover = mean(Percent))
+```
+
+The percent cover for bare = 77.5%, byrophytes = 2.5%, and Vascular = 20.0%	 in the Donnerville 1 site.
+
+## Determine the average percent vascular plant cover across all sites.
+```{r}
+Cover %>%
+  filter(Type == "Vascular")%>%
+  summarise(
+    avg_percent = mean(Percent))
+```
+The average percent cover for Vascular plants in all sites is 16.6666667%.
+
+
