@@ -34,7 +34,7 @@ ggplot(compensation, aes(x = Root, y = Fruit, shape = Grazing, color = Grazing))
   theme_bw()
 ```
 
-
+# create boxplot
 ```{r}
 ggplot(compensation, aes(x = Grazing, y = Fruit)) + 
   geom_boxplot() +
