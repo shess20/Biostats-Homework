@@ -1,0 +1,70 @@
+---
+title: "Homework-21"
+author: "Sierra Hess"
+date: "10/20/2022"
+output: html_document
+---
+
+## Set things up:
+Add code to clear R's brain and to turn on the dplyr and here packages
+```{r}
+rm(list = ls()) # clear R's brain
+library(dplyr)
+library(ggplot2)
+library (here)
+library(Hmisc)
+```
+
+# add compensation dataset
+```{r}
+compensation <- read.csv(here("Data", "compensation.csv"), stringsAsFactors = TRUE)
+```
+
+# check out the data
+```{r}
+glimpse(compensation)
+```
+
+# make my first ggplot picture
+```{r}
+ggplot(compensation, aes(x = Root, y = Fruit, shape = Grazing, color = Grazing)) + 
+  geom_point(size = 5) +
+  xlab("Root Biomass") +
+  ylab("Fruit Production")
+  theme_bw()
+```
+
+
+```{r}
+ggplot(compensation, aes(x = Grazing, y = Fruit)) + 
+  geom_boxplot() +
+  geom_point(size = 4, colour = 'lightgrey', alpha = 0.5) +
+  xlab("Grazing Treatment") +
+  ylab("Fruit Production")
+  theme_bw()
+```
+#create a basic histogram 
+```{r}
+ggplot(compensation, aes(x = Fruit)) + 
+  geom_histogram()
+```
+
+# add bins/ binwidths to the histogram
+```{r}
+ggplot(compensation, aes(x = Fruit)) + 
+  geom_histogram(bins = 10)
+ggplot(compensation, aes(x = Fruit)) +
+  geom_histogram(binwidth = 15)
+```
+
+
+#add facet_wrap() function to histogram
+```{r}
+ggplot(compensation, aes(x = Fruit)) + 
+  geom_histogram(binwidth =  15) +
+  facet_wrap(~Grazing)
+```
+```{r}
+ggsave("ThatCoolHistogramOfFruit.png")
+```
+
