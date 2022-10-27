@@ -70,7 +70,7 @@ ggplot(soil, aes(y = Ca.ppm, x = Field.Name)) +
 
 # create a histogram for Ca ppm
 ```{r}
-ggplot(soil, aes(x = Ca.ppm)) + 
+ggplot(soil, aes(x = Ca.ppmusethis::create_github_token())) + 
   geom_histogram(bins = 10)
 
 ```

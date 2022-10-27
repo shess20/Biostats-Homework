@@ -1,0 +1,98 @@
+---
+title: "Homework 24 draft"
+author: "Sierra Hess"
+output: html_document
+---
+
+# My first chi-square analysis
+
+# Clear the decks
+```{r}
+rm(list = ls())
+```
+
+#libraries to use
+```{r}
+library(dplyr)
+library(ggplot2)
+library (here)
+library(Hmisc)
+```
+
+```{r}
+ozone <- read.csv(here("Data", "ozone.csv"), stringsAsFactors = TRUE)
+lady <- read.csv(here("Data", "ladybirds.csv"), stringsAsFactors = TRUE)
+```
+# check it out 
+```{r}
+glimpse(lady)
+```
+
+# use groupby and summarise to summarise the data
+```{r}
+totals <- lady %>%
+  group_by(Habitat, colour) %>% 
+  summarise(total.number = sum(number))
+```
+```{r}
+ggplot(totals, aes(x = Habitat, y = total.number, fill = colour)) +
+  geom_bar(stat = 'identity', position = 'dodge')
+
+```
+
+## change the colors of the histogram
+
+```{r}
+ggplot(totals, aes(x = Habitat, y = total.number, fill = colour)) +
+  geom_bar(stat = 'identity', position = 'dodge') +
+  scale_fill_manual(values = c(black = "black", red = "red"))
+```
+
+# use xtabs for the X^2 test
+```{r}
+lady.mat <- xtabs(number ~ Habitat + colour, data = lady)
+
+lady.mat
+```
+
+# Use Chisq.test
+```{r}
+chisq.test(lady.mat)
+```
+
+This tells us that there is a very small probability that the pattern is by chance. 
+
+# look at the names from chisq test
+```{r}
+lady.chi <- chisq.test(lady.mat)
+names(lady.chi)
+```
+
+# look at expected values 
+```{r}
+lady.chi$expected
+```
+
+# look at ozone
+```{r}
+glimpse(ozone)
+```
+
+# evaluate assumotions of a two sample t test
+```{r}
+ggplot(ozone, aes (x = Ozone)) +
+  geom_histogram(binwidth = 10) +
+  facet_wrap(~Garden.location, ncol = 1) + 
+  theme_bw()
+```
+
+
+# Do a t test
+```{r}
+t.test(Ozone ~ Garden.location, data = ozone)
+```
+
+# use the var test
+```{r}
+var.test(Ozone ~ Garden.location, data = ozone)
+```
