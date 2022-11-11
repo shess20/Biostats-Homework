@@ -107,6 +107,8 @@ sum1
 
 Here, we can see that the Donnerville worms are much lower than the kip trail worms, so the abundance does differ. 
 
+
+
 ### 3. Does the abundance of soil Magnesium (Mg_ppm) differ between Peavine and South Hammond?
 
 
