@@ -1,0 +1,122 @@
+---
+title: "Homework 23"
+author: "Sierra Hess"
+date: "10/24/2022"
+output: html_document
+---
+
+## Set things up:
+Add code to clear R's brain and to turn on the dplyr and here packages
+```{r}
+rm(list = ls()) # clear R's brain
+library(dplyr)
+library(ggplot2)
+library (here)
+library(Hmisc)
+```
+
+```{r}
+soil <- read.csv(here("Data", "soil_data.csv"), stringsAsFactors = TRUE)
+```
+
+# make a scatterplot for SOM percent
+```{r}
+ggplot(soil, aes(y = SOM_percent, x = Field.Name)) + 
+  geom_point(size = 5) +
+  ylab("SOM percent") +
+  xlab("Field Name")
+  theme_bw()
+```
+
+# create boxplot for SOM percent
+```{r}
+ggplot(soil, aes(y = SOM_percent, x = Field.Name)) + 
+  geom_boxplot() +
+  geom_point(size = 4, colour = 'lightgrey', alpha = 0.5) +
+  xlab("Field Name") +
+  ylab("SOM percent")
+  theme_bw()
+```
+
+
+# create a histogram for SOM percent
+```{r}
+ggplot(soil, aes(x = SOM_percent)) + 
+  geom_histogram(bins = 10)
+
+```
+
+# make a scatterplot for Ca ppm
+```{r}
+ggplot(soil, aes(y = Ca.ppm, x = Field.Name)) + 
+  geom_point(size = 5) +
+  ylab("Ca ppm") +
+  xlab("Field Name")
+  theme_bw()
+```
+
+
+
+# create boxplot for SOM percent
+```{r}
+ggplot(soil, aes(y = Ca.ppm, x = Field.Name)) + 
+  geom_boxplot() +
+  geom_point(size = 4, colour = 'lightgrey', alpha = 0.5) +
+  ylab("Ca.ppm") +
+  xlab("Field Name")
+  theme_bw()
+```
+
+
+# create a histogram for Ca ppm
+```{r}
+ggplot(soil, aes(x = Ca.ppmusethis::create_github_token())) + 
+  geom_histogram(bins = 10)
+
+```
+SOMETHING HAPPENED ON THAT GGPLOT - NOT SURE WHY THE USETHIS CODE IS IN IT.
+
+ALSO, YOU WERE SUPPOSSED TO MAKE A NEW FOREST COLUMN BEFORE YOU STARTED ALL THE PLOTS. SEE THE KEY FOR HOW TO DO THAT.  ALSO SEE BELOW AS POSSIBLE CODE:
+
+```{r}
+#create new column
+soil$Forest <-"" #creates new empty character column
+#sort forests and fill in column
+Degrasse<-"DEGRASSE*" #creates wildcard to search
+fix <- grep(Degrasse, soil$field_name)
+soil$Forest[fix]<- "Degrasse"
+
+Don <-"DONNERVILLE*"
+fix <- grep(Don, soil$field_name)
+soil$Forest[fix]<- "Donnerville"
+
+Kip <-"KIP*"
+fix <-grep(Kip, soil$field_name)
+soil$Forest[fix] <- "Kip Tract"
+
+Pea <-"PEAVINE*"
+fix <-grep(Pea, soil$field_name)
+soil$Forest[fix] <- "Peavine"
+
+SH <-"SOUTH HAMMOND*"
+fix <-grep(SH, soil$field_name)
+soil$Forest[fix] <- "South Hammond"
+
+soil$Forest
+```
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
