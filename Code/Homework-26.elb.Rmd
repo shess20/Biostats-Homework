@@ -1,0 +1,144 @@
+---
+title: "HW 26"
+author: "Sierra Hess"
+date: "11/2/2022"
+output: html_document
+---
+
+Set things up 
+```{r}
+rm(list = ls())
+library(tidyverse)
+library(here)
+library(ggfortify)
+```
+
+Now lets pull in the data 
+```{r}
+soil <- read.csv(here("Data", "soil_reduced-1.csv"), stringsAsFactors = TRUE)
+```
+Before we begin any analysis, we need to check our data for possible errors/ outliers. Lets begin with that. 
+
+A. Forest names
+```{r}
+levels(soil$Forest)
+```
+
+B. Lets check soil organic matter and soil calcium
+start with a histogram
+```{r}
+ggplot(soil, aes(x = SOM_percent)) + 
+  geom_histogram()
+```
+
+Now check soil calcium
+```{r}
+ggplot(soil, aes(x = Ca_ppm)) + 
+  geom_histogram()
+```
+
+Lets run a summary on all of the variables:
+```{r}
+summary(soil)
+```
+
+
+## We'd like to ask the following questions from the data:
+
+### 1. Is there a relationship between Soil organic matter (SOM, %) and soil calcium (Ca_ppm)?
+
+Both variables are continuous 
+
+Lets make a scatter plot
+
+#### Plot relationship
+```{r}
+ggplot(soil, aes(x = SOM_percent, y = Ca_ppm, color = Forest)) + 
+  geom_point() +
+  theme_bw()
+```
+
+From looking at the data, it appears that there may be a weak positive relationship between SOM and Ca
+
+Can I guess the SOM intercept?
+Slope c. 1000/53 = 18ish , y int c. -5? 0? right around there. 
+
+What statistical model fits these data. 
+Both the reponse and predictor are continuous, so linear regression seems appropriate. 
+
+So, lets construct the model:
+```{r}
+SOM_Ca_Mod <- lm(Ca_ppm ~ SOM_percent, soil)
+summary(SOM_Ca_Mod)
+```
+Now I need to check the model assumptions before interpreting. 
+```{r}
+autoplot(SOM_Ca_Mod)
+```
+
+Based on my observations of the autoplot results, I'm modestly comfortable that my data meet the lm assumptions. 
+
+Now look at model outcome. 
+```{r}
+anova(SOM_Ca_Mod)
+```
+```{r}
+summary(SOM_Ca_Mod)
+```
+The p value is  > .05, so we cannot reject the null hypothesis which means that there is no clear relationship between soil organic matter and soil calcium. 
+
+
+### 2. Does the abundance of worms differ between Donnerville and the Kip Tract?
+Lets first look at a scatterplot of the data
+```{r}
+ggplot(soil, aes(x = Worms, y = Forest)) + 
+  geom_point() +
+  theme_bw()
+```
+
+Here, we can see that there does appear to be an average higher number of worms on the kip trail than on the  Donnerville path. 
+Now, lets look at the mean number of worms on each trail. 
+```{r}
+sum1 <- soil %>%
+  group_by(Forest) %>%
+  summarise(meanWorms = mean(Worms))
+sum1
+```
+
+Here, we can see that the Donnerville worms are much lower than the kip trail worms, so the abundance does differ. 
+
+OK BUT HOW COULD YOU CHECK WITH A STATISTICAL TEST? YOU NEED TO CREATE A CHI-SQUARE TEST. THIS HOMEWORK REPEATS ALL OF THE TESTS WE SEE IN CHAPTER 5 AS NEW EXAMPLES.
+
+### 3. Does the abundance of soil Magnesium (Mg_ppm) differ between Peavine and South Hammond?
+
+
+
+```{r}
+sum2 <- soil %>%
+  group_by(Forest) %>%
+  summarise(meanMg = mean(Mg_ppm))
+sum2
+```
+
+Here we can see that there is also a fairly large difference between the Peavine and south Hammond average magnesium.
+
+AGAIN, YOU SHOULD RUN A STATISTICAL TEST
+
+### 4. Does the abundance of zinc (Zn_ppm) differ among forests?
+
+Lets ignore na in kip trail Zn
+```{r}
+soil <- soil %>%
+  filter(Zn_ppm >= 0)
+```
+
+Lets look at the average zinc abundance in each forest
+```{r}
+sum2 <- soil %>%
+  group_by(Forest) %>%
+  summarise(meanZn = mean(Zn_ppm))
+sum2
+```
+Here, we can see that the average zinc differed between forests. 
+
+YOUR WORK DID NOT RUN THE TESTS AS PER CHAPTER 5
