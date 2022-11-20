@@ -1,0 +1,136 @@
+---
+title: "Homework 25"
+author: "Sierra Hess"
+output: html_document
+---
+
+# My first chi-square analysis
+
+# Clear the decks
+```{r}
+rm(list = ls())
+```
+
+#libraries to use
+```{r}
+library(dplyr)
+library(ggplot2)
+library (here)
+library(Hmisc)
+library(ggfortify)
+```
+
+# load the data
+```{r}
+plant_gr <- read.csv(here("Data", "plant.growth.rate.csv"), stringsAsFactors = TRUE)
+daphnia <- plant_gr <- read.csv(here("Data", "Daphniagrowth.csv"), stringsAsFactors = TRUE)
+```
+
+# look at the data
+```{r}
+glimpse(plant_gr)
+```
+```{r}
+ggplot(plant_gr, aes(x = soil.moisture.content, y = plant.growth.rate)) +
+  geom_point() + 
+  ylab("Plant Growth Rate (mm/ week)") + 
+  theme_bw
+```
+I get an error for using theme_bw, so I can remove this from the code. 
+
+```{r}
+ggplot(plant_gr, aes(x = soil.moisture.content, y = plant.growth.rate)) +
+  geom_point() + 
+  ylab("Plant Growth Rate (mm/ week)") 
+```
+
+# Use the lm function to fit the model
+```{r}
+model_pgr <- lm(plant.growth.rate ~ soil.moisture.content, 
+                data = plant_gr)
+```
+
+# Use autoplot
+```{r}
+autoplot(model_pgr, smooth.colour = NA)
+```
+
+# Use anova to view the variance table
+```{r}
+anova(model_pgr)
+```
+# Use the summary function 
+```{r}
+summary(model_pgr)
+```
+
+# Make a plot with a regression line
+```{r}
+ggplot(plant_gr, aes(x = soil.moisture.content, y = plant.growth.rate)) + 
+  geom_point() + 
+  geom_smooth(method = 'lm') + 
+  ylab("Plant Growth Rate (mm/week)") + 
+  theme_bw()
+  
+```
+
+
+# Use glimpse to view the daphnia data
+```{r}
+glimpse(daphnia)
+```
+# plot daphnia data using a boxplot
+```{r}
+ggplot(daphnia, aes(x = parasite, y = growth.rate)) + 
+  geom_boxplot() 
+```
+
+
+# use coord_flip to flip axis
+
+```{r}
+ggplot(daphnia, aes(x = parasite, y = growth.rate)) + 
+  geom_boxplot() + 
+  coord_flip()
+```
+
+# Fit the model 
+```{r}
+model_grow <- lm(growth.rate ~ parasite, data = daphnia)
+```
+
+# Use autoplot
+```{r}
+autoplot(model_grow, smooth.colour = NA)
+```
+
+# View the anova table
+```{r}
+anova(model_grow)
+```
+
+# View the summary
+```{r}
+summary(model_grow)
+```
+# get the mean growth rates
+```{r}
+sumDat <- daphnia %>%
+  group_by(parasite) %>%
+  summarise(meanGR = mean(growth.rate))
+sumDat
+```
+
+# install packages 
+```{r}
+install.packages("devtools")
+library(devtools)
+install_github("sinhrks/ggfortify")
+```
+
+YOUR CODE LOOKS OK BUT I'M NOT SEEING MUCH IN TERMS OF WHY YOU ARE DOING CERTAIN TESTS OR WHAT THE RESULTS TELL YOU.  R WILL DO WHATEVER YOU TELL IT TO; YOU NEED TO BE ABLE TO KNOW IF IT IS CORRECT.
+
+
+
+
+
